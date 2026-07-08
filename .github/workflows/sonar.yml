@@ -1,0 +1,24 @@
+name: Análise de Qualidade (SonarCloud)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  sonarcloud:
+    name: SonarCloud Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Desativa o shallow clone para que o Sonar analise o histórico do git corretamente
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Gerado automaticamente pelo GitHub
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # O segredo que você cadastrou nas configurações
